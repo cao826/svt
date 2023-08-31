@@ -14,6 +14,7 @@
 import argparse
 import os
 import sys
+import pdb
 import datetime
 import time
 import math
@@ -1051,4 +1052,5 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("SVT", parents=[get_args_parser()])
     args = parser.parse_args()
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+    pdb.set_trace()
     train_svt(args)

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PROJECT_PATH="$HOME/repo/svt"
-DATA_PATH="$HOME/data/kinetics/400/annotations"
+PROJECT_PATH="/radraid/colivares/github_repos/svt"
+DATA_PATH="/radraid/colivares/dsa_data/dsa_images/nifti_raw_time"
 EXP_NAME="svt_test"
 
 cd "$PROJECT_PATH" || exit
@@ -10,14 +10,14 @@ if [ ! -d "checkpoints/$EXP_NAME" ]; then
   mkdir "checkpoints/$EXP_NAME"
 fi
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3
+export CUDA_VISIBLE_DEVICES=0
 
 python -m torch.distributed.launch \
-  --nproc_per_node=4 \
+  --nproc_per_node=1 \
   --master_port="$RANDOM" \
   train_ssl.py \
   --arch "timesformer" \
-  --batch_size_per_gpu 8 \
+  --batch_size_per_gpu 1 \
   --data_path "${DATA_PATH}" \
   --output_dir "checkpoints/$EXP_NAME" \
   --opts \
