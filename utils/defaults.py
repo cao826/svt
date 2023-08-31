@@ -2,6 +2,7 @@
 
 """Configs."""
 from fvcore.common.config import CfgNode
+
 # -----------------------------------------------------------------------------
 # Config definition
 # -----------------------------------------------------------------------------
@@ -255,8 +256,8 @@ _C.SLOWFAST.FUSION_KERNEL_SZ = 5
 
 ####### TimeSformer Options
 _C.TIMESFORMER = CfgNode()
-_C.TIMESFORMER.ATTENTION_TYPE = 'divided_space_time'
-_C.TIMESFORMER.PRETRAINED_MODEL = ''
+_C.TIMESFORMER.ATTENTION_TYPE = "divided_space_time"
+_C.TIMESFORMER.PRETRAINED_MODEL = ""
 
 # Second model
 _C.MODEL.TWO_STREAM = False
@@ -271,7 +272,7 @@ _C.MIXUP.CUTMIX_ALPHA = 1.0
 _C.MIXUP.CUTMIX_MINMAX = None
 _C.MIXUP.PROB = 1.0
 _C.MIXUP.SWITCH_PROB = 0.5
-_C.MIXUP.MODE = 'batch'
+_C.MIXUP.MODE = "batch"
 
 _C.EMA = CfgNode()
 _C.EMA.ENABLED = False
@@ -285,7 +286,7 @@ _C.DATA = CfgNode()
 _C.DATA.PATH_TO_DATA_DIR = ""
 
 # The separator used between path and label.
-_C.DATA.PATH_LABEL_SEPARATOR = " "
+_C.DATA.PATH_LABEL_SEPARATOR = " "  # this was originally " "
 
 # Video path prefix if any.
 _C.DATA.PATH_PREFIX = ""
@@ -352,8 +353,8 @@ _C.DATA.RAND_FR = False
 ############
 _C.DATA.TEMPORAL_EXTENT = 8
 _C.DATA.DEIT_TRANSFORMS = False
-_C.DATA.COLOR_JITTER = 0.
-_C.DATA.AUTO_AUGMENT = ''
+_C.DATA.COLOR_JITTER = 0.0
+_C.DATA.AUTO_AUGMENT = ""
 _C.DATA.RE_PROB = 0.0
 
 # ---------------------------------------------------------------------------- #
@@ -581,13 +582,13 @@ _C.MULTIGRID.EPOCH_FACTOR = 1.5
 # Enable short cycles.
 _C.MULTIGRID.SHORT_CYCLE = False
 # Short cycle additional spatial dimensions relative to the default crop size.
-_C.MULTIGRID.SHORT_CYCLE_FACTORS = [0.5, 0.5 ** 0.5]
+_C.MULTIGRID.SHORT_CYCLE_FACTORS = [0.5, 0.5**0.5]
 
 _C.MULTIGRID.LONG_CYCLE = False
 # (Temporal, Spatial) dimensions relative to the default shape.
 _C.MULTIGRID.LONG_CYCLE_FACTORS = [
-    (0.25, 0.5 ** 0.5),
-    (0.5, 0.5 ** 0.5),
+    (0.25, 0.5**0.5),
+    (0.5, 0.5**0.5),
     (0.5, 1),
     (1, 1),
 ]
@@ -798,6 +799,7 @@ _C.DEMO.COMMON_CLASS_NAMES = [
 # Slow-motion rate for the visualization. The visualized portions of the
 # video will be played `_C.DEMO.SLOWMO` times slower than usual speed.
 _C.DEMO.SLOWMO = 1
+
 
 def _assert_and_infer_cfg(cfg):
     # BN assertions.

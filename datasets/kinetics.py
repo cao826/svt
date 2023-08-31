@@ -20,6 +20,7 @@ from datasets.decoder import decode
 from datasets.video_container import get_video_container
 from datasets.transform import VideoDataAugmentationDINO
 from einops import rearrange
+import pdb
 
 
 class Kinetics(torch.utils.data.Dataset):
@@ -127,6 +128,7 @@ class Kinetics(torch.utils.data.Dataset):
                 decoded, then return the index of the video. If not, return the
                 index of the video replacement that can be decoded.
         """
+        pdb.set_trace()
         short_cycle_idx = None
         # When short cycle is used, input index is a tupple.
         if isinstance(index, tuple):
@@ -355,13 +357,11 @@ if __name__ == "__main__":
     from tqdm import tqdm
 
     args = parse_args()
-    args.cfg_file = "/home/kanchanaranasinghe/repo/timesformer/configs/Kinetics/TimeSformer_divST_8x32_224.yaml"
+    args.cfg_file = "/radraid/colivares/github_repos/svt/configs/Kinetics/TimeSformer_divST_8x32_224.yaml"
     config = load_config(args)
-    config.DATA.PATH_TO_DATA_DIR = (
-        "/home/kanchanaranasinghe/data/kinetics400/new_annotations"
-    )
+    config.DATA.PATH_TO_DATA_DIR = "/radraid/colivares/dsa_data/dsa_dfs"
     # config.DATA.PATH_TO_DATA_DIR = "/home/kanchanaranasinghe/data/kinetics400/k400-mini"
-    config.DATA.PATH_PREFIX = "/home/kanchanaranasinghe/data/kinetics400"
+    config.DATA.PATH_PREFIX = "/radraid/colivares/dsa_data/dsa_images/nifti_raw_time"
     # dataset = Kinetics(cfg=config, mode="val", num_retries=10)
     dataset = Kinetics(cfg=config, mode="train", num_retries=10, get_flow=True)
     print(f"Loaded train dataset of length: {len(dataset)}")
@@ -375,7 +375,7 @@ if __name__ == "__main__":
         from PIL import Image
         from transform import undo_normalize
 
-        vis_path = "/home/kanchanaranasinghe/data/kinetics400/vis/spatial_aug"
+        vis_path = "/radraid/colivares/test"
 
         for aug_idx in range(len(i[0])):
             temp = i[0][aug_idx][3].permute(1, 2, 3, 0)
