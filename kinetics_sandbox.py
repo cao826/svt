@@ -7,6 +7,7 @@ import torch
 import torch.utils.data
 import torchvision
 import kornia
+import pdb
 
 from datasets.transform import resize
 from datasets.data_utils import (
@@ -30,15 +31,16 @@ if __name__ == "__main__":
     args = parse_args()
     args.cfg_file = "/radraid/colivares/github_repos/svt/models/configs/Kinetics/TimeSformer_divST_8x32_224.yaml"
     config = load_config(args)
-    config.DATA.PATH_TO_DATA_DIR = "/radraid/colivares/dsa_data/dsa_dfs"
+    config.DATA.PATH_TO_DATA_DIR = "/radraid/colivares/videos"
     # config.DATA.PATH_TO_DATA_DIR = "/home/kanchanaranasinghe/data/kinetics400/k400-mini"
-    config.DATA.PATH_PREFIX = "/radraid/colivares/dsa_data/dsa_images/nifti_raw_time"
+    config.DATA.PATH_PREFIX = "/radraid/colivares/videos"
     # dataset = Kinetics(cfg=config, mode="val", num_retries=10)
-    dataset = Kinetics(cfg=config, mode="train", num_retries=10, get_flow=True)
+    dataset = Kinetics(cfg=config, mode="train", num_retries=10, get_flow=False)
     print(f"Loaded train dataset of length: {len(dataset)}")
     dataloader = torch.utils.data.DataLoader(dataset=dataset, batch_size=4)
     for idx, i in enumerate(dataloader):
-        print([x.shape for x in i[0]], i[1:3], [x.shape for x in i[3]["flow"]])
+        pdb.set_trace()
+        print([x.shape for x in i[0]], i[1:3])
         break
 
     do_vis = False

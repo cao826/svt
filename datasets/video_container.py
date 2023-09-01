@@ -15,7 +15,7 @@ def get_video_container(path_to_vid, multi_thread_decode=False, backend="pyav"):
     Returns:
         container (container): video container.
     """
-    pdb.set_trace()
+    # pdb.set_trace()
     if backend == "torchvision":
         with open(path_to_vid, "rb") as fp:
             container = fp.read()

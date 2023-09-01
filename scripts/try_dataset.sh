@@ -1,5 +1,5 @@
 PROJECT_PATH="/radraid/colivares/github_repos/svt"
-DATA_PATH="/radraid/colivares/dsa_data/dsa_images/nifti_raw_time"
+DATA_PATH="/radraid/colivares/videos"
 EXP_NAME="svt_test"
 
 cd "$PROJECT_PATH" || exit

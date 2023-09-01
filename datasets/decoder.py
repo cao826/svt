@@ -211,8 +211,17 @@ def torchvision_decode(
 
 
 def pyav_decode(
-    container, sampling_rate, num_frames, clip_idx, num_clips=10, target_fps=30, start=None, end=None
-, duration=None, frames_length=None):
+    container,
+    sampling_rate,
+    num_frames,
+    clip_idx,
+    num_clips=10,
+    target_fps=30,
+    start=None,
+    end=None,
+    duration=None,
+    frames_length=None,
+):
     """
     Convert the video from its original fps to the target_fps. If the video
     support selective decoding (contain decoding information in the video head),
@@ -248,7 +257,7 @@ def pyav_decode(
     frames_length = container.streams.video[0].frames
     duration = container.streams.video[0].duration
     if duration is None and orig_duration is not None:
-       duration = orig_duration / tb
+        duration = orig_duration / tb
 
     if duration is None:
         # If failed to fetch the decoding information, decode the entire video.
@@ -316,7 +325,7 @@ def decode(
     frames_length=None,
     temporal_aug=False,
     two_token=False,
-    rand_fr=False
+    rand_fr=False,
 ):
     """
     Decode the video and perform temporal sampling.
@@ -375,9 +384,7 @@ def decode(
                 max_spatial_scale,
             )
         else:
-            raise NotImplementedError(
-                "Unknown decoding backend {}".format(backend)
-            )
+            raise NotImplementedError("Unknown decoding backend {}".format(backend))
     except Exception as e:
         print("Failed to decode by {} with exception: {}".format(backend, e))
         return None
@@ -399,13 +406,17 @@ def decode(
         global_samples = []
         for _ in range(3):
             random_idx = random.randint(0, 6)
-            cur_global = temporal_sampling(frames, random_idx, max_len - random_idx, num_frames)
+            cur_global = temporal_sampling(
+                frames, random_idx, max_len - random_idx, num_frames
+            )
             global_samples.append(cur_global)
         local_samples = []
         local_width = max_len // 8
         for _ in range(2):
             random_idx = random.randint(0, max_len - local_width - 1)
-            cur_local = temporal_sampling(frames, random_idx, random_idx + local_width, num_frames)
+            cur_local = temporal_sampling(
+                frames, random_idx, random_idx + local_width, num_frames
+            )
             local_samples.append(cur_local)
         frames = [*global_samples, *local_samples]
     elif temporal_aug:
@@ -419,7 +430,12 @@ def decode(
             num_local_frames = [2, 2, 4, 4, 8, 8, 16, 16]
             for l_idx in range(8):
                 random_idx = random.randint(0, max_len - local_width - 1)
-                cur_local = temporal_sampling(frames, random_idx, random_idx + local_width, num_local_frames[l_idx])
+                cur_local = temporal_sampling(
+                    frames,
+                    random_idx,
+                    random_idx + local_width,
+                    num_local_frames[l_idx],
+                )
                 local_samples.append(cur_local)
         else:
             num_global_frames = num_frames
@@ -430,11 +446,15 @@ def decode(
             local_width = max_len // 8
             for _ in range(8):
                 random_idx = random.randint(0, max_len - local_width - 1)
-                cur_local = temporal_sampling(frames, random_idx, random_idx + local_width, num_local_frames)
+                cur_local = temporal_sampling(
+                    frames, random_idx, random_idx + local_width, num_local_frames
+                )
                 local_samples.append(cur_local)
 
         frames = [global_1, global_2, *local_samples]
 
     else:
-        frames = temporal_sampling(frames, start_idx, end_idx, num_frames)  # frames.shape = (T, H, W, C)
+        frames = temporal_sampling(
+            frames, start_idx, end_idx, num_frames
+        )  # frames.shape = (T, H, W, C)
     return frames

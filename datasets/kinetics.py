@@ -128,7 +128,7 @@ class Kinetics(torch.utils.data.Dataset):
                 decoded, then return the index of the video. If not, return the
                 index of the video replacement that can be decoded.
         """
-        pdb.set_trace()
+        # pdb.set_trace()
         short_cycle_idx = None
         # When short cycle is used, input index is a tupple.
         if isinstance(index, tuple):
@@ -186,6 +186,7 @@ class Kinetics(torch.utils.data.Dataset):
         for i_try in range(self._num_retries):
             video_container = None
             try:
+                # pdb.set_trace()
                 video_container = get_video_container(
                     self._path_to_videos[index],
                     self.cfg.DATA_LOADER.ENABLE_MULTI_THREAD_DECODE,
@@ -303,6 +304,7 @@ class Kinetics(torch.utils.data.Dataset):
                 ]
 
             meta_data = {}
+            # pdb.set_trace()
             if self.get_flow:
                 assert self.mode == "train", "flow only for train"
                 try:
@@ -365,6 +367,7 @@ if __name__ == "__main__":
     # dataset = Kinetics(cfg=config, mode="val", num_retries=10)
     dataset = Kinetics(cfg=config, mode="train", num_retries=10, get_flow=True)
     print(f"Loaded train dataset of length: {len(dataset)}")
+    pdb.set_trace()
     dataloader = torch.utils.data.DataLoader(dataset=dataset, batch_size=4)
     for idx, i in enumerate(dataloader):
         print([x.shape for x in i[0]], i[1:3], [x.shape for x in i[3]["flow"]])
