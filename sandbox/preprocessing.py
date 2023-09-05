@@ -67,7 +67,7 @@ def trim_frames(image: np.ndarray):
     return image
 
 
-# @preprocessing_step  # decide whether we really need this
+@preprocessing_step  # decide whether we really need this
 def crop_image(image: np.ndarray, tol=0.01) -> np.ndarray:
     """removes bars (with noise) on image edges. tol is the amount of noise allowed.
     args:
@@ -121,7 +121,7 @@ def resize_video(image: np.ndarray):
     return resized_image
 
 
-# @preprocessing_step
+@preprocessing_step
 def clip_image(image: np.ndarray, boundaries=None, mode="multiotsu") -> np.ndarray:
     """clips image values to an interval based on image intensities.
     Available are multiotsu thresholding, and above median
@@ -140,8 +140,6 @@ def clip_image(image: np.ndarray, boundaries=None, mode="multiotsu") -> np.ndarr
     elif not boundaries and not mode:
         boundaries = [image.min(), image.max()]
     clipped = np.clip(image, boundaries[0], boundaries[-1])
-    if clipped.shape[1] != 512:
-        raise Exception("shape has changed")
     return clipped
 
 

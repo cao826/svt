@@ -8,6 +8,8 @@ import numpy as np
 import nibabel as nib
 import av
 
+from preprocessing import apply_pipeline
+
 
 def compute_pid_output_filename(path2video: str) -> str:
     """NOTE: This function assumes that the PID is the
@@ -103,6 +105,7 @@ def convert_nifti_file_to_mp4(
         print(f"shape of read in video {nifti_video.shape}")
     save_filename = compute_pid_output_filename(path2nifti)
     output_path = os.path.join(savepath, save_filename)
+    nifti_video = apply_pipeline(nifti_video)
     np_grayscale_to_mp4(nifti_video=nifti_video, savepath=output_path, debug=debug)
     return output_path
 
