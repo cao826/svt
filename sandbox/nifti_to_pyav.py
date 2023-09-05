@@ -1,13 +1,12 @@
 import os
 import pdb
 import argparse
+import random
 from tqdm import tqdm, trange
+import pandas as pd
 import numpy as np
 import nibabel as nib
 import av
-
-
-## these functions are good for utils
 
 
 def compute_pid_output_filename(path2video: str) -> str:
@@ -21,7 +20,7 @@ def compute_pid_output_filename(path2video: str) -> str:
     Returns:
         output_filename (str): _description_
     """
-    pdb.set_trace()
+    # pdb.set_trace()
     pid = os.path.dirname(path2video).split("/")[-1]
     filename = os.path.basename(path2video)
     filename = filename.replace(".nii.gz", ".mp4")
@@ -67,7 +66,9 @@ def np_grayscale_to_mp4(
         stream.width = n_columns
         stream.height = n_rows
         stream.pix_fmt = "gray"
-        for frame_index in trange(n_frames):
+        for frame_index in trange(
+            n_frames, desc="Converting frames...", position=1, leave=False
+        ):
             frame_array = normalize_to_grayscale(
                 image=nifti_video[:, :, frame_index], debug=debug
             )
@@ -95,7 +96,7 @@ def convert_nifti_file_to_mp4(
     Returns:
         av.container.Container: _description_
     """
-    pdb.set_trace()
+    # pdb.set_trace()
     nifti_file = nib.load(path2nifti)
     nifti_video = nifti_file.get_fdata()
     if debug:
@@ -103,6 +104,7 @@ def convert_nifti_file_to_mp4(
     save_filename = compute_pid_output_filename(path2nifti)
     output_path = os.path.join(savepath, save_filename)
     np_grayscale_to_mp4(nifti_video=nifti_video, savepath=output_path, debug=debug)
+    return output_path
 
 
 def parse_args() -> argparse.Namespace:
@@ -123,6 +125,12 @@ def parse_args() -> argparse.Namespace:
         help="Path where you want to save the pyav containers to (if that is a thing)",
     )
     parser.add_argument("--debug", "-debug", "-d", action="store_true")
+    parser.add_argument(
+        "--videos_csv",
+        "-videos_csv",
+        type=str,
+        help="Path to the csv containing the filenames of each nifti to be converted to mp4",
+    )
     args = parser.parse_args()
     return args
 
@@ -133,8 +141,32 @@ def main(args: argparse.Namespace) -> None:
     Args:
         args (argparse.Namespace): _description_
     """
-    convert_nifti_file_to_mp4(
-        path2nifti=args.path2niftis, savepath=args.savepath, debug=args.debug
+    videos_dataframe = pd.read_csv(args.videos_csv)
+    print(videos_dataframe.columns)
+    mp4_paths = []
+    dummy_labels = []
+    for i, row in tqdm(
+        videos_dataframe.iterrows(),
+        desc="Outer: scan wise",
+        position=0,
+        total=videos_dataframe.shape[0],
+    ):
+        pid = row["PID"]
+        filename = row["filename"]
+        input_path = os.path.join(args.path2niftis, f"{pid}_IR", filename)
+        mp4_path = convert_nifti_file_to_mp4(
+            path2nifti=input_path, savepath=args.savepath, debug=args.debug
+        )
+        mp4_paths.append(mp4_path)
+        dummy_labels.append(random.randint(a=1, b=125))
+    kinetics_style_dataframe = pd.DataFrame(
+        {"path": mp4_paths, "dummy_label": dummy_labels}
+    )
+    kinetics_style_dataframe.to_csv(
+        path_or_buf=os.path.join(args.savepath, "train.csv"),
+        sep=" ",
+        header=False,
+        index=False,
     )
 
 

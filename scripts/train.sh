@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_PATH="/radraid/colivares/github_repos/svt"
-DATA_PATH="/radraid/colivares/videos"
+DATA_PATH="/raid/colivares/dsa_mp4s/"
 EXP_NAME="test_with_kinetics_subsample"
 
 cd "$PROJECT_PATH" || exit
