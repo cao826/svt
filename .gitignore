@@ -1,3 +1,7 @@
+# Stuff that Carlos added
+
+*.mp4
+
 # Project specific
 .idea
 .DS_Store

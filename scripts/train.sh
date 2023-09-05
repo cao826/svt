@@ -1,8 +1,8 @@
 #!/bin/bash
 
 PROJECT_PATH="/radraid/colivares/github_repos/svt"
-DATA_PATH="/radraid/colivares/dsa_data/dsa_images/nifti_raw_time"
-EXP_NAME="svt_test"
+DATA_PATH="/radraid/colivares/videos"
+EXP_NAME="test_with_kinetics_subsample"
 
 cd "$PROJECT_PATH" || exit
 
